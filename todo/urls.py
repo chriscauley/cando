@@ -5,4 +5,5 @@ urlpatterns = patterns(
   url('^$','find_all'),
   url('^(\d+)/$','find_one'),
   url('^delete/(\d+)/$','delete'),
+  url('^new/$','new'),
 )

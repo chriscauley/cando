@@ -2,7 +2,8 @@ var Todo = can.Model.extend({
   findAll: 'GET /todo/',
   findOne: 'GET /todo/{id}/',
   update: 'POST /todo/{id}/',
-  destroy: 'POST /todo/delete/{id}/'
+  destroy: 'POST /todo/delete/{id}/',
+  create: 'POST /todo/new/',
 }, {});
 
 can.Component.extend({
@@ -14,9 +15,12 @@ can.Component.extend({
     select: function(todo){
       this.attr('selectedTodo', todo);
     },
-    save: function(todo) {
+    saveTodo: function(todo) {
       todo.save();
       this.removeAttr('selectedTodo');
+    },
+    newTodo: function() {
+      var t = new Todo({}).save(function() { this.todos = new Todo.List({}); });
     }
   }
 })
