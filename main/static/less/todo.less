@@ -1,0 +1,39 @@
+/* @override 
+   http://beta.canjs.com/example/example.css */
+
+* {
+  font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+todolist {
+  display: block;
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 8px 0 0 0;
+  }
+  li {
+    position: relative;
+    padding: 2px 0;
+    height: 24px;
+    font-size: 14px;
+    &:hover { background-color: #eeeeee; }
+    [type=checkbox] {
+      top: 4px;
+      left: 2px;
+    }
+    .description {
+      top: 5px;
+      right: 20px;
+      left: 22px;
+      done { text-decoration: line-through; }
+    }
+    button {
+      border: 0;
+      background: transparent;
+      top: 6px;
+      right: 0;
+      width: 16px;
+    }
+  }
+}
