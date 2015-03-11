@@ -14,14 +14,23 @@ can.Component.extend({
     todos: new Todo.List({}),
     select: function(todo){
       this.attr('selectedTodo', todo);
+      $("#todo-edit").focus();
     },
     saveTodo: function(todo) {
       todo.save();
       this.removeAttr('selectedTodo');
     },
     newTodo: function() {
-      var t = new Todo({}).save(function() { this.todos = new Todo.List({}); });
-    }
+      var that = this;
+      new Todo({}).save(function(t) {
+        todos = that.attr("todos").push(t);
+        that.attr("selectedTodo",t);
+      });
+    },
+    destroyTodo: function(todo) {
+      this.todos.removeAttr(this.todos.indexOf(todo));
+      todo.destroy();
+    },
   }
 })
 $(function() {
