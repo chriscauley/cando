@@ -9,9 +9,12 @@ class JsonModel(models.Model):
     abstract = True
 
 class TaskList(JsonModel):
-  name = models.CharField(max_length=256)
+  name = models.CharField(max_length=256,default="New List")
   user = models.ForeignKey(User)
   order = models.IntegerField()
+  json_properties = ["name","id","order"]
+
+  __unicode__ = lambda self: "%s: %s"%(self.user,self.name)
   def save(self,*args,**kwargs):
     if not self.order:
       self.order = self.task_set.count()
@@ -20,7 +23,7 @@ class TaskList(JsonModel):
     ordering = ('order',)
 
 class Task(JsonModel):
-  description = models.CharField(max_length=256)
+  description = models.CharField(max_length=256,default="New Task")
   user = models.ForeignKey(User)
   tasklist = models.ForeignKey(TaskList,null=True,blank=True)
   complete = models.BooleanField(default=False)

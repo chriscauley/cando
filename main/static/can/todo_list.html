@@ -1,4 +1,5 @@
 <h2>Todays to-dos</h2>
+{{list_id}}
 {{#selectedTodo}}
 <input type="text" can-value="description" can-change="saveTodo" id="todo-edit" />
 {{/selectedTodo}}
@@ -10,7 +11,7 @@
       {{#complete}}<i class="fa fa-check-square"></i>{{/complete}}
     </span>
     <span class="description{{#if complete}} done{{/if}}" can-click="select">{{description}}</span>
-    <button can-click="destroyTodo"><i class="fa fa-close"></i></button>
+    <span class="destroy" can-click="destroyTodo"><i class="fa fa-close"></i></span>
   </li>
   {{/each}}
 </ul>

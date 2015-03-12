@@ -3,27 +3,50 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Task
+from .models import TaskList, Task
 
 import json
 
-def find_all(request):
-  return HttpResponse(json.dumps([t.json for t in Task.objects.filter(user=request.user)]))
+MODELS = {
+  "task": Task,
+  "list": TaskList
+}
+
+def list_lists(request):
+  return HttpResponse(json.dumps([t.json for t in TaskList.objects.filter(user=request.user)]))
 
 @csrf_exempt
-def find_one(request,pk):
-  t = get_object_or_404(Task,pk=pk,user=request.user)
+def new_list(request):
+  return HttpResponse(json.dumps(TaskList.objects.create(user=request.user).json))
+
+@csrf_exempt
+def get_list(request,pk):
+  tasklist = get_object_or_404(TaskList,pk=pk,user=request.user)
   if request.POST:
-    t.description = request.POST['description']
-    t.complete = json.loads(request.POST['complete'])
-    t.save()
-  return HttpResponse(json.dumps(t.json))
+    tasklist.name = request.POST['name']
+    tasklist.order = request.POST.get('order',None) or tasklist.order
+    tasklist.save()
+  return HttpResponse(json.dumps(tasklist.json))
 
 @csrf_exempt
-def delete(request,pk):
-  t = get_object_or_404(Task,pk=pk,user=request.user).delete()
+def delete(request,model_name,pk):
+  model = MODELS[model_name]
+  t = get_object_or_404(model,pk=pk,user=request.user).delete()
   return HttpResponse('')
 
+def list_tasks(request,pk=None):
+  return HttpResponse(json.dumps([t.json for t in Task.objects.filter(user=request.user,tasklist_id=pk)]))
+
 @csrf_exempt
-def new(request):
-  return HttpResponse(json.dumps(Task.objects.create(user=request.user,description="New Task").json))
+def new_task(request,pk):
+  return HttpResponse(json.dumps(Task.objects.create(user=request.user,tasklist_id=pk).json))
+
+@csrf_exempt
+def get_task(request,pk):
+  task = get_object_or_404(Task,pk=pk,user=request.user)
+  if request.POST:
+    task.description = request.POST['description']
+    task.complete = json.loads(request.POST['complete'])
+    task.order = request.POST['order']
+    task.save()
+  return HttpResponse(json.dumps(task.json))

@@ -2,51 +2,35 @@
   font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
-todolist {
-  display: block;
+#todo-wrapper {
   margin: 0 auto;
   width: 320px;
-  ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 8px 0 10px 0;
-  }
+}
+
+list {
   li {
     position: relative;
-    padding: 6px 0;
-    font-size: 14px;
-    &:nth-of-type(odd) {
-      background-color: @table-bg-accent;
-    }
+    &:nth-of-type(odd) { background-color: @table-bg-accent; }
     .check {
       display: inline-block;
-      font-size: 23px;
-      height: 25px;
       margin-right: 5px;
-      line-height: 25px;
-      vertical-align: middle;
     }
     &:hover { background-color: @table-bg; }
     .description {
       width: 100%;
       &.done { text-decoration: line-through; }
     }
-    button {
-      border: 0;
-      background: transparent;
+    .destroy {
       color: @brand-danger;
+      display: inline-block;
       height: 20px;
       line-height: 20px;
       margin-top: -10px;
       position: absolute;
       right: 10px;
+      text-align: center;
       top: 50%;
-      width: 16px;
+      width: 20px;
     }
-  }
-  .add-another {
-    border: 1px solid #333;
-    border-radius: 2px;
-    color: green;
   }
 }

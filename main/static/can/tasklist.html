@@ -1,0 +1,13 @@
+<h2>Choose a Task List</h2>
+{{#selectedList}}
+<input type="text" can-value="name" can-change="saveList" id="list-edit" />
+{{/selectedList}}
+<ul class="list-group">
+  {{#each lists}}
+  <li class="list-group-item">
+    <span class="name" can-click="select">{{name}}</span>
+  </li>
+  {{/each}}
+</ul>
+<span class="btn btn-primary" can-click="newList">
+  <i class="fa fa-plus"></i> Add Another</span>
