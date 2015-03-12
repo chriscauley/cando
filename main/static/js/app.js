@@ -16,6 +16,10 @@ can.Component.extend({
       this.attr('selectedTodo', todo);
       $("#todo-edit").focus();
     },
+    check: function(todo) {
+      todo.attr("complete",!todo.attr("complete"));
+      todo.save();
+    },
     saveTodo: function(todo) {
       todo.save();
       this.removeAttr('selectedTodo');

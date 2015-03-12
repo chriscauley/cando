@@ -8,7 +8,7 @@ from .models import Task
 import json
 
 def find_all(request):
-  return HttpResponse(json.dumps([t.as_json for t in Task.objects.filter(user=request.user)]))
+  return HttpResponse(json.dumps([t.json for t in Task.objects.filter(user=request.user)]))
 
 @csrf_exempt
 def find_one(request,pk):
@@ -17,7 +17,7 @@ def find_one(request,pk):
     t.description = request.POST['description']
     t.complete = json.loads(request.POST['complete'])
     t.save()
-  return HttpResponse(json.dumps(t.as_json))
+  return HttpResponse(json.dumps(t.json))
 
 @csrf_exempt
 def delete(request,pk):
@@ -26,4 +26,4 @@ def delete(request,pk):
 
 @csrf_exempt
 def new(request):
-  return HttpResponse(json.dumps(Task.objects.create(user=request.user,description="New Task").as_json))
+  return HttpResponse(json.dumps(Task.objects.create(user=request.user,description="New Task").json))
