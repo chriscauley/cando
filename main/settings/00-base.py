@@ -14,8 +14,6 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
-  'social.apps.django_app.context_processors.backends',
-  'social.apps.django_app.context_processors.login_redirect',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -26,7 +24,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.static',
   'django.core.context_processors.tz',
   'django.core.context_processors.request',
-  'django.contrib.messages.context_processors.messages'
+  'django.contrib.messages.context_processors.messages',
+  'social.apps.django_app.context_processors.backends',
+  'social.apps.django_app.context_processors.login_redirect',
 )
 
 ROOT_URLCONF = 'cando.main.urls'
@@ -50,6 +50,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, '../.static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '../.media')
 LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = "/"
 
 STATICFILES_FINDERS = (
   'django.contrib.staticfiles.finders.FileSystemFinder',

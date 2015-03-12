@@ -11,6 +11,7 @@ urlpatterns = patterns(
   url(r'favicon.ico$', 'main.views.redirect',
       {'url': getattr(settings,'FAVICON','/static/favicon.png')}),
   url(r'^auth/',include('django.contrib.auth.urls')),
+  url(r'', include('social.apps.django_app.urls', namespace='social')),
   url(r'',include('todo.urls')),
 )
 
