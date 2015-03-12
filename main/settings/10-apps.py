@@ -1,6 +1,7 @@
 INSTALLED_APPS = (
   'main',
   'suit',
+  'social.apps.django_app.default',
 
   'django.contrib.admin',
   'django.contrib.auth',

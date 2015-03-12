@@ -15,3 +15,5 @@ Django-Next-Please
 
 # Paul needs to update the version on PyPi :(
 -e git+https://github.com/chriscauley/Django-Crop-Override-Field.git#egg=django-crop-override-field
+
+python-social-auth

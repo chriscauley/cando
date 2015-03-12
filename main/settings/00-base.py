@@ -14,6 +14,8 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  'social.apps.django_app.context_processors.backends',
+  'social.apps.django_app.context_processors.login_redirect',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -60,3 +62,13 @@ LESS_EXECUTABLE = 'lessc'
 COMPRESS_PRECOMPILERS = (('text/less', 'lessc {infile} {outfile}'),)
 
 FAVICON = '/static/favicon.ico'
+
+AUTHENTICATION_BACKENDS = (
+  #'social.backends.open_id.OpenIdAuth',
+  #'social.backends.google.GoogleOpenId',
+  'social.backends.google.GoogleOAuth2',
+  #'social.backends.google.GoogleOAuth',
+  'social.backends.twitter.TwitterOAuth',
+  #'social.backends.yahoo.YahooOpenId',
+  'django.contrib.auth.backends.ModelBackend',
+)

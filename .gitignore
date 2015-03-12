@@ -3,6 +3,7 @@
 static/*
 media/*
 
+main/settings/private.py
 .static/*
 .media/*
 db.sqlite3
