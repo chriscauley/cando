@@ -28,7 +28,8 @@ can.Component.extend({
       var that = this;
       new Todo({}).save(function(t) {
         todos = that.attr("todos").push(t);
-        that.attr("selectedTodo",t);
+        that.attr('selectedTodo', t);
+        $("#todo-edit").select();
       });
     },
     destroyTodo: function(todo) {
