@@ -3,6 +3,11 @@
 <html>
   <head>
     <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="initial-scale=1">
+    <meta name="keywords" content="{% block meta-keywords %}todo list, can.js{% endblock %}">
+    <meta name="description" content="{% block meta-description %}A todo list made using can.js{% endblock %}">
+    <meta name="author" content="{% block meta-author %}ChrisCauley{% endblock %}">
+    <meta name="application-name" content="CanDo">
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
@@ -28,13 +33,11 @@
   <body>
     <div id="wrapper">
       <header>
-	{% block header %}{% include "header.html" %}{% endblock %}
+        {% block nav %}{% include "_nav.html" %}{% endblock %}
       </header>
       <div id="content">
-	{% block content %}
-	<div id="main">{% block main %}{% endblock %}</div>
-	<div id="side">{% block side %}{% endblock %}</div>
-	{% endblock %}
+        {% block header %}<h1 id="content-header">{% block header_content %}{% endblock %}</h1>{% endblock %}
+        {% block content %}{% endblock %}
       </div>
       <footer id="footer">
         {% block footer %}{% include "footer.html" %}{% endblock %}
