@@ -71,5 +71,6 @@ AUTHENTICATION_BACKENDS = (
   #'social.backends.google.GoogleOAuth',
   'social.backends.twitter.TwitterOAuth',
   #'social.backends.yahoo.YahooOpenId',
+  'main.backends.EmailOrUsernameModelBackend',
   'django.contrib.auth.backends.ModelBackend',
 )
