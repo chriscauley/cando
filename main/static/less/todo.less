@@ -8,6 +8,22 @@
 }
 
 list {
+  .right-icon {
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    margin-top: -10px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    top: 50%;
+    width: 20px;
+  }
+  .destroy { color: @brand-danger; }
+  h2 {
+    position: relative;
+    .right-icon { font-size: 0.8em; }
+  }
   li {
     position: relative;
     &:nth-of-type(odd) { background-color: @table-bg-accent; }
@@ -19,18 +35,6 @@ list {
     .description {
       width: 100%;
       &.done { text-decoration: line-through; }
-    }
-    .destroy {
-      color: @brand-danger;
-      display: inline-block;
-      height: 20px;
-      line-height: 20px;
-      margin-top: -10px;
-      position: absolute;
-      right: 10px;
-      text-align: center;
-      top: 50%;
-      width: 20px;
     }
   }
 }
