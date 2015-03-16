@@ -13,8 +13,8 @@ _log = (function() {
   };
 })({});
 
-function logSuccess(message) { _log(message,"success"); }
-function logError(message) { _log(message,"error"); }
+function logSuccess(message) { return function(){ _log(message,"success"); } }
+function logError(message) { return function() { _log(message,"error"); } }
 
 var ACTIVE_LIST;
 var Todo = can.Model.extend({
@@ -46,15 +46,16 @@ can.Component.extend({
     },
     select: function(list) {
       ACTIVE_LIST = list;
+      console.log('?');
       $("#todo-wrapper").append(can.mustache("<list></list>")({list:ACTIVE_LIST}));
-      $("#todo-wrapper tasklist").hide();
+      $("#todo-wrapper tasklists").hide();
     },
     newList: function() {
       var that = this;
       new TaskList({}).save(function(l) {
         that.attr('lists').push(l);
-        that.attr('selectedList', l);
-        $("#list-edit").select()
+        $("tasklists .list-group-item span").last().click();
+        selectEditable($(".list-name")[0]);
       });
     },
     destroyList: function(list) {
@@ -66,13 +67,11 @@ can.Component.extend({
 
 $(function() {
   $("#todo-wrapper").append(can.mustache("<tasklists></tasklists>")({}));
-  logSuccess("todo added");
 });
 
 // from http://stackoverflow.com/a/3866442
-function makeEditable(e) {
+function selectEditable(e) {
   var range,selection;
-
   range = document.createRange();
   range.selectNodeContents(e);
   range.collapse(false);
@@ -89,8 +88,7 @@ can.Component.extend({
     todos: new Todo.List({}),
     list: ACTIVE_LIST,
     saveList: function(todo) {
-      console.log("saving");
-      this.attr('list').save();
+      this.attr('list').save(logSuccess("List saved"));
     },
     select: function(todo) {
       this.attr('selectedTodo', todo);
@@ -98,7 +96,7 @@ can.Component.extend({
     },
     check: function(todo) {
       todo.attr("complete",!todo.attr("complete"));
-      todo.save();
+      todo.save(logSuccess("Task Completed"));
     },
     saveTodo: function(todo) {
       todo.save();
@@ -117,6 +115,10 @@ can.Component.extend({
       this.todos.removeAttr(this.todos.indexOf(todo));
       todo.destroy();
     },
+    back: function(todo) {
+      $("#todo-wrapper tasklists").show();
+      $("#todo-wrapper list").remove();
+    }
   }},
   events: {
     "[contenteditable] keypress": function(element,event) {

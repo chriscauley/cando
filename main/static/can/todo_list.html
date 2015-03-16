@@ -1,5 +1,6 @@
+<a can-click="back">Back to lists</a>
 <h2>
-  <div can-value="list.name" contenteditable="true" can-change="saveList"></div>
+  <div can-value="list.name" class="list-name" contenteditable="true" can-change="saveList"></div>
 </h2>
 {{#selectedTodo}}
 <input type="text" can-value="description" can-change="saveTodo" id="todo-edit" />
