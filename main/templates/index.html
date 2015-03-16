@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 
+{% block extrahead %} <script src="{{ STATIC_URL }}js/app.js"></script>{% endblock %}
+
 {% block content %}
 <div id="todo-wrapper"></div>
 {% endblock %}
