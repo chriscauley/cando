@@ -7,19 +7,23 @@
   width: 320px;
 }
 
+.right-icon {
+  display: inline-block;
+  height: 20px;
+  line-height: 20px;
+  margin-top: -10px;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+  top: 50%;
+  width: 20px;
+  &.fa-close { color: @brand-danger; }
+}
+tasklists {
+  h3 { position: relative; }
+}
+
 list {
-  .right-icon {
-    display: inline-block;
-    height: 20px;
-    line-height: 20px;
-    margin-top: -10px;
-    position: absolute;
-    right: 10px;
-    text-align: center;
-    top: 50%;
-    width: 20px;
-  }
-  .destroy { color: @brand-danger; }
   h2 {
     position: relative;
     .right-icon { font-size: 0.8em; }
@@ -36,5 +40,16 @@ list {
       width: 100%;
       &.done { text-decoration: line-through; }
     }
+  }
+}
+
+logentry {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  .alert {
+    margin-bottom: 0;
+    padding: 7px 15px;
   }
 }

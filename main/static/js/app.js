@@ -1,10 +1,28 @@
+can.Component.extend({
+  tag: 'logentry',
+  template: can.view('/static/can/logger.html'),
+});
+
+_log = (function() {
+  var timeout;
+  return function(message,className) {
+    var entry = can.mustache("<logentry></logentry>")({message: message, className:className});
+    $("#todo-wrapper").append(entry);
+    clearTimeout(timeout)
+    setTimeout(function(){$("logentry").remove()},2000)
+  };
+})({});
+
+function logSuccess(message) { _log(message,"success"); }
+function logError(message) { _log(message,"error"); }
+
 var ACTIVE_LIST;
 var Todo = can.Model.extend({
-  findAll: function(attrs) { return $.get("/list/"+ACTIVE_LIST+"/tasks/",attrs,undefined,"json"); },
+  findAll: function(attrs) { return $.get("/list/"+ACTIVE_LIST.id+"/tasks/",attrs,undefined,"json"); },
   findOne: 'GET /task/{id}/',
   update: 'POST /task/{id}/',
   destroy: 'POST /task/delete/{id}/',
-  create: function(attrs) { return $.get("/list/"+ACTIVE_LIST+"/new/",attrs,undefined,"json"); },
+  create: function(attrs) { return $.get("/list/"+ACTIVE_LIST.id+"/new/",attrs,undefined,"json"); },
 }, {});
 
 var TaskList = can.Model.extend({
@@ -21,9 +39,15 @@ can.Component.extend({
   scope: function() { return {
     selectedList: null,
     lists: new TaskList.List({}),
+    editMode: false,
+    toggleEdit: function() {
+      console.log(this);
+      this.attr("editMode",!this.attr("editMode"));
+    },
     select: function(list) {
-      ACTIVE_LIST = list.id;
-      $("#todo-wrapper").append(can.mustache("<list list_id='1'></list>")({}));
+      ACTIVE_LIST = list;
+      $("#todo-wrapper").append(can.mustache("<list></list>")({list:ACTIVE_LIST}));
+      $("#todo-wrapper tasklist").hide();
     },
     newList: function() {
       var that = this;
@@ -32,13 +56,30 @@ can.Component.extend({
         that.attr('selectedList', l);
         $("#list-edit").select()
       });
-    }
+    },
+    destroyList: function(list) {
+      this.lists.removeAttr(this.lists.indexOf(list));
+      list.destroy();
+    },
   } }
 });
 
 $(function() {
   $("#todo-wrapper").append(can.mustache("<tasklists></tasklists>")({}));
+  logSuccess("todo added");
 });
+
+// from http://stackoverflow.com/a/3866442
+function makeEditable(e) {
+  var range,selection;
+
+  range = document.createRange();
+  range.selectNodeContents(e);
+  range.collapse(false);
+  selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
 
 can.Component.extend({
   tag: 'list',
@@ -46,7 +87,12 @@ can.Component.extend({
   scope: function() { return {
     selectedTodo: null,
     todos: new Todo.List({}),
-    select: function(todo){
+    list: ACTIVE_LIST,
+    saveList: function(todo) {
+      console.log("saving");
+      this.attr('list').save();
+    },
+    select: function(todo) {
       this.attr('selectedTodo', todo);
       $("#todo-edit").focus();
     },
@@ -60,17 +106,29 @@ can.Component.extend({
     },
     newTodo: function() {
       var that = this;
-      console.log(this);
       new Todo({}).save(function(t) {
         that.attr("todos").push(t);
         that.attr('selectedTodo', t);
         $("#todo-edit").select();
+        logSuccess("todo added")
       });
     },
     destroyTodo: function(todo) {
       this.todos.removeAttr(this.todos.indexOf(todo));
       todo.destroy();
     },
-  }}
-})
-
+  }},
+  events: {
+    "[contenteditable] keypress": function(element,event) {
+      if (event.which == 13) {
+        var list = this.scope.attr('list');
+        list.attr("name",element.text());
+        list.save();
+        element.blur();
+        window.getSelection().removeAllRanges();
+        return false;
+      }
+      return true;
+    }
+  }
+});

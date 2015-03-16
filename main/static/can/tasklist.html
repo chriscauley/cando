@@ -1,11 +1,19 @@
-<h2>Choose a Task List</h2>
+<h3>Choose a Task List <i class="fa fa-edit right-icon" can-click="toggleEdit"></i></h3>
 {{#selectedList}}
 <input type="text" can-value="name" can-change="saveList" id="list-edit" />
 {{/selectedList}}
 <ul class="list-group">
   {{#each lists}}
   <li class="list-group-item">
+    {{#if editMode}}
+    <span class="name" can-click="select">
+      {{name}}
+      <i class="fa fa-close right-icon" can-click="destroyList"></i>
+    </span>
+    {{/if}}
+    {{^if editMode}}
     <span class="name" can-click="select">{{name}}</span>
+    {{/if}}
   </li>
   {{/each}}
 </ul>
