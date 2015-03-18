@@ -41,12 +41,10 @@ can.Component.extend({
     lists: new TaskList.List({}),
     editMode: false,
     toggleEdit: function() {
-      console.log(this);
       this.attr("editMode",!this.attr("editMode"));
     },
     select: function(list) {
       ACTIVE_LIST = list;
-      console.log('?');
       $("#todo-wrapper").append(can.mustache("<list></list>")({list:ACTIVE_LIST}));
       $("#todo-wrapper tasklists").hide();
     },
@@ -84,44 +82,53 @@ can.Component.extend({
   tag: 'list',
   template: can.view("/static/can/todo_list.html"),
   scope: function() { return {
-    selectedTodo: null,
     todos: new Todo.List({}),
     list: ACTIVE_LIST,
     saveList: function(todo) {
       this.attr('list').save(logSuccess("List saved"));
     },
-    select: function(todo) {
+    /*select: function(todo) {
       this.attr('selectedTodo', todo);
       $("#todo-edit").focus();
-    },
+    },*/
     check: function(todo) {
       todo.attr("complete",!todo.attr("complete"));
       todo.save(logSuccess("Task Completed"));
     },
-    saveTodo: function(todo) {
-      todo.save();
-      this.removeAttr('selectedTodo');
+    blurTask: function(task,element,event) {
+      task.attr('description',element.text());
+      task.save(logSuccess("Task Completed"));
+      return true;
+    },
+    press: function(task,element,event) {
+      if (event.which == 13) {
+        element.blur();
+        window.getSelection().removeAllRanges();
+        task.attr('description',element.text());
+        task.save(logSuccess("Task Completed"));
+        return false;
+      }
+      return true;
     },
     newTodo: function() {
       var that = this;
       new Todo({}).save(function(t) {
         that.attr("todos").push(t);
         that.attr('selectedTodo', t);
-        $("#todo-edit").select();
-        logSuccess("todo added")
+        logSuccess("Task added... edit above.");
       });
     },
-    destroyTodo: function(todo) {
-      this.todos.removeAttr(this.todos.indexOf(todo));
-      todo.destroy();
+    destroyTask: function(task) {
+      this.tasks.removeAttr(this.tasks.indexOf(task));
+      task.destroy();
     },
-    back: function(todo) {
+    back: function(task) {
       $("#todo-wrapper tasklists").show();
       $("#todo-wrapper list").remove();
     }
   }},
   events: {
-    "[contenteditable] keypress": function(element,event) {
+    ".list-name[contenteditable] keypress": function(element,event) {
       if (event.which == 13) {
         var list = this.scope.attr('list');
         list.attr("name",element.text());

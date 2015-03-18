@@ -1,21 +1,21 @@
-<a can-click="back">Back to lists</a>
+<a can-click="back" class="back"><i class="fa fa-caret-square-o-left"></i> Back to lists</a>
 <h2>
   <div can-value="list.name" class="list-name" contenteditable="true" can-change="saveList"></div>
 </h2>
-{{#selectedTodo}}
-<input type="text" can-value="description" can-change="saveTodo" id="todo-edit" />
-{{/selectedTodo}}
 <ul class="list-group">
   {{#each todos}}
-  <li class="list-group-item">
-    <span can-click="check" class="check">
+  <li class="list-group-item" data-id="{{id}}">
+    <div can-click="check" class="check">
       {{^complete}}<i class="fa fa-square"></i>{{/complete}}
       {{#complete}}<i class="fa fa-check-square"></i>{{/complete}}
-    </span>
-    <span class="description{{#if complete}} done{{/if}}" can-click="select">{{description}}</span>
-    <i class="fa fa-close right-icon" can-click="destroyTodo"></i>
+    </div>
+    <div class="description{{#if complete}} done{{/if}}" contenteditable="true"
+         can-keypress="press" can-blur="blurTask">
+      {{description}}</div>
+    <i class="fa fa-close right-icon" can-click="destroyTask"></i>
+    <i class="fa fa-check right-icon"></i>
   </li>
   {{/each}}
+  <li class="list-group-item-primary list-group-item" can-click="newTodo">
+    <i class="fa fa-plus"></i> Add Another</li>
 </ul>
-<span class="btn btn-primary" can-click="newTodo">
-  <i class="fa fa-plus"></i> Add Another</span>
