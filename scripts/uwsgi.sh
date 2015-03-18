@@ -1,5 +1,5 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-if 'cat /tmp/cando_uwsgi.pid && kill -HUP `cat /tmp/cando_uwsgi.pid`)'
+if 'cat /tmp/cando.pid && kill -HUP `cat /tmp/cando.pid`)'
 then
     echo "uwsgi reset"
 else
