@@ -1,6 +1,6 @@
 can.Component.extend({
   tag: 'logentry',
-  template: can.view('/static/can/logger.html'),
+  template: can.view('/static/mustache/logger.html'),
 });
 
 _log = (function() {
@@ -35,7 +35,7 @@ var TaskList = can.Model.extend({
 
 can.Component.extend({
   tag: 'tasklists',
-  template: can.view("/static/can/tasklist.html"),
+  template: can.view("/static/mustache/tasklist.html"),
   scope: function() { return {
     selectedList: null,
     lists: new TaskList.List({}),
@@ -80,24 +80,21 @@ function selectEditable(e) {
 
 can.Component.extend({
   tag: 'list',
-  template: can.view("/static/can/todo_list.html"),
+  template: can.view("/static/mustache/todo_list.html"),
   scope: function() { return {
     todos: new Todo.List({}),
     list: ACTIVE_LIST,
     saveList: function(todo) {
       this.attr('list').save(logSuccess("List saved"));
     },
-    /*select: function(todo) {
-      this.attr('selectedTodo', todo);
-      $("#todo-edit").focus();
-    },*/
     check: function(todo) {
-      todo.attr("complete",!todo.attr("complete"));
-      todo.save(logSuccess("Task Completed"));
+      var status = !todo.attr("complete");
+      todo.attr("complete",status);
+      todo.save(logSuccess(status?"Task completed":"Task uncompleted"));
     },
     blurTask: function(task,element,event) {
       task.attr('description',element.text());
-      task.save(logSuccess("Task Completed"));
+      task.save(logSuccess("Task saved"));
       return true;
     },
     press: function(task,element,event) {
@@ -105,7 +102,7 @@ can.Component.extend({
         element.blur();
         window.getSelection().removeAllRanges();
         task.attr('description',element.text());
-        task.save(logSuccess("Task Completed"));
+        task.save(logSuccess("Task saved"));
         return false;
       }
       return true;
@@ -121,6 +118,7 @@ can.Component.extend({
     destroyTask: function(task) {
       this.tasks.removeAttr(this.tasks.indexOf(task));
       task.destroy();
+      logSuccess("Task deleted");
     },
     back: function(task) {
       $("#todo-wrapper tasklists").show();
