@@ -6,13 +6,13 @@
   {{#each lists}}
   <li class="list-group-item">
     {{#if editMode}}
-    <span class="name" can-click="select">
+    <div class="name" can-click="select">
       {{name}}
       <i class="fa fa-close right-icon" can-click="destroyList"></i>
-    </span>
+    </div>
     {{/if}}
     {{^if editMode}}
-    <span class="name" can-click="select">{{name}}</span>
+    <div class="name" can-click="select">{{name}}</div>
     {{/if}}
   </li>
   {{/each}}

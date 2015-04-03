@@ -112,13 +112,13 @@ can.Component.extend({
       new Todo({}).save(function(t) {
         that.attr("todos").push(t);
         that.attr('selectedTodo', t);
-        logSuccess("Task added... edit above.");
+        logSuccess("Task added... edit above.")();
       });
     },
     destroyTask: function(task) {
-      this.tasks.removeAttr(this.tasks.indexOf(task));
-      task.destroy();
-      logSuccess("Task deleted");
+      this.todos.removeAttr(this.todos.indexOf(task));
+      task.destroy()
+      logSuccess("Task deleted")();
     },
     back: function(task) {
       $("#todo-wrapper tasklists").show();
