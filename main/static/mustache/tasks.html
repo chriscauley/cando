@@ -3,7 +3,7 @@
   <div can-value="list.name" class="list-name" contenteditable="true" can-change="saveList"></div>
 </h2>
 <ul class="list-group">
-  {{#each todos}}
+  {{#each tasks}}
   <li class="list-group-item" data-id="{{id}}">
     <div can-click="check" class="check">
       {{^complete}}<i class="fa fa-square"></i>{{/complete}}
@@ -16,6 +16,6 @@
     <i class="fa fa-check right-icon"></i>
   </li>
   {{/each}}
-  <li class="list-group-item-primary list-group-item" can-click="newTodo">
+  <li class="list-group-item-primary list-group-item" can-click="newTask">
     <i class="fa fa-plus"></i> Add Another Task</li>
 </ul>

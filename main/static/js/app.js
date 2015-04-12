@@ -7,7 +7,7 @@ _log = (function() {
   var timeout;
   return function(message,className) {
     var entry = can.mustache("<logentry></logentry>")({message: message, className:className});
-    $("#todo-wrapper").append(entry);
+    $("#task-wrapper").append(entry);
     clearTimeout(timeout)
     setTimeout(function(){$("logentry").remove()},2000)
   };
@@ -17,7 +17,7 @@ function logSuccess(message) { return function(){ _log(message,"success"); } }
 function logError(message) { return function() { _log(message,"error"); } }
 
 var ACTIVE_LIST;
-var Todo = can.Model.extend({
+var Task = can.Model.extend({
   findAll: function(attrs) { return $.get("/list/"+ACTIVE_LIST.id+"/tasks/",attrs,undefined,"json"); },
   findOne: 'GET /task/{id}/',
   update: 'POST /task/{id}/',
@@ -35,7 +35,7 @@ var TaskList = can.Model.extend({
 
 can.Component.extend({
   tag: 'tasklists',
-  template: can.view("/static/mustache/tasklist.html"),
+  template: can.view("/static/mustache/tasklists.html"),
   scope: function() { return {
     selectedList: null,
     lists: new TaskList.List({}),
@@ -45,8 +45,8 @@ can.Component.extend({
     },
     select: function(list) {
       ACTIVE_LIST = list;
-      $("#todo-wrapper").append(can.mustache("<list></list>")({list:ACTIVE_LIST}));
-      $("#todo-wrapper tasklists").hide();
+      $("#task-wrapper").append(can.mustache("<list></list>")({list:ACTIVE_LIST}));
+      $("#task-wrapper tasklists").hide();
     },
     newList: function() {
       var that = this;
@@ -64,7 +64,7 @@ can.Component.extend({
 });
 
 $(function() {
-  $("#todo-wrapper").append(can.mustache("<tasklists></tasklists>")({}));
+  $("#task-wrapper").append(can.mustache("<tasklists></tasklists>")({}));
 });
 
 // from http://stackoverflow.com/a/3866442
@@ -80,17 +80,17 @@ function selectEditable(e) {
 
 can.Component.extend({
   tag: 'list',
-  template: can.view("/static/mustache/todo_list.html"),
+  template: can.view("/static/mustache/tasks.html"),
   scope: function() { return {
-    todos: new Todo.List({}),
+    tasks: new Task.List({}),
     list: ACTIVE_LIST,
-    saveList: function(todo) {
+    saveList: function(task) {
       this.attr('list').save(logSuccess("List saved"));
     },
-    check: function(todo) {
-      var status = !todo.attr("complete");
-      todo.attr("complete",status);
-      todo.save(logSuccess(status?"Task completed":"Task uncompleted"));
+    check: function(task) {
+      var status = !task.attr("complete");
+      task.attr("complete",status);
+      task.save(logSuccess(status?"Task completed":"Task uncompleted"));
     },
     blurTask: function(task,element,event) {
       task.attr('description',element.text());
@@ -107,22 +107,22 @@ can.Component.extend({
       }
       return true;
     },
-    newTodo: function() {
+    newTask: function() {
       var that = this;
-      new Todo({}).save(function(t) {
-        that.attr("todos").push(t);
-        that.attr('selectedTodo', t);
+      new Task({}).save(function(t) {
+        that.attr("tasks").push(t);
+        that.attr('selectedTask', t);
         logSuccess("Task added... edit above.")();
       });
     },
     destroyTask: function(task) {
-      this.todos.removeAttr(this.todos.indexOf(task));
+      this.tasks.removeAttr(this.tasks.indexOf(task));
       task.destroy()
       logSuccess("Task deleted")();
     },
     back: function(task) {
-      $("#todo-wrapper tasklists").show();
-      $("#todo-wrapper list").remove();
+      $("#task-wrapper tasklists").show();
+      $("#task-wrapper list").remove();
     }
   }},
   events: {
