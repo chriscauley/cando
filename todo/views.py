@@ -45,8 +45,8 @@ def new_task(request,pk):
 def get_task(request,pk):
   task = get_object_or_404(Task,pk=pk,user=request.user)
   if request.POST:
-    task.description = request.POST['description'].strip()
-    task.complete = json.loads(request.POST['complete'])
-    task.order = request.POST['order']
+    task.description = request.POST.get('description',task.description).strip()
+    task.complete = json.loads(request.POST['complete']) if 'complete' in request.POST else task.complete
+    task.order = request.POST.get('order',task.order)
     task.save()
   return HttpResponse(json.dumps(task.json))
