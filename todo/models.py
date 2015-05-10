@@ -12,13 +12,16 @@ class TaskList(JsonModel):
   name = models.CharField(max_length=256,default="New List")
   user = models.ForeignKey(User)
   order = models.IntegerField()
-  json_properties = ["name","id","order"]
+  json_properties = ["name","id","order","tasks"]
 
   __unicode__ = lambda self: "%s: %s"%(self.user,self.name)
   def save(self,*args,**kwargs):
     if not self.order:
       self.order = self.task_set.count()
     super(TaskList,self).save(*args,**kwargs)
+  @property
+  def tasks(self):
+    return [t.json for t in self.task_set.all()]
   class Meta:
     ordering = ('order',)
 

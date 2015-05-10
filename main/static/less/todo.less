@@ -2,11 +2,6 @@
   font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
-#task-wrapper {
-  margin: 0 auto;
-  width: 320px;
-}
-
 .right-icon {
   display: inline-block;
   height: 20px;
@@ -20,17 +15,18 @@
   &.fa-close { color: @brand-danger; }
   &.fa-check { color: @brand-success; }
 }
-tasklists {
-  h1,h2,h3,h4 { position: relative; }
-}
+h1,h2,h3,h4 { position: relative; }
 
-list, logentry, tasklists { display: block; }
+list, logentry, tasklists, tasks, lists { display: block; }
 
-list,tasklists {
+list,tasklists, // can
+lists,tasks { //riot
   position: relative;
   h2 {
-    position: relative;
     .right-icon { font-size: 0.8em; }
+  }
+  [can-click], .click {
+    cursor: pointer;
   }
   li.list-group-item {
     padding: 10px 30px;

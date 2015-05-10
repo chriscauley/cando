@@ -23,7 +23,7 @@ def new_list(request):
 def get_list(request,pk):
   tasklist = get_object_or_404(TaskList,pk=pk,user=request.user)
   if request.POST:
-    tasklist.name = request.POST['name']
+    tasklist.name = request.POST['name'].strip()
     tasklist.order = request.POST.get('order',None) or tasklist.order
     tasklist.save()
   return HttpResponse(json.dumps(tasklist.json))
@@ -45,7 +45,7 @@ def new_task(request,pk):
 def get_task(request,pk):
   task = get_object_or_404(Task,pk=pk,user=request.user)
   if request.POST:
-    task.description = request.POST['description']
+    task.description = request.POST['description'].strip()
     task.complete = json.loads(request.POST['complete'])
     task.order = request.POST['order']
     task.save()

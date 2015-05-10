@@ -8,6 +8,7 @@ urlpatterns = patterns(
   '',
   url(r'^admin/', include(admin.site.urls)),
   url(r'^$', 'main.views.home',name='home'),
+  url(r'^riot/$', 'main.views.riot',name='riot'),
   url(r'favicon.ico$', 'main.views.redirect',
       {'url': getattr(settings,'FAVICON','/static/favicon.png')}),
   url(r'^auth/',include('django.contrib.auth.urls')),

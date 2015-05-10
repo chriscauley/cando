@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<lists></lists>
+{% endblock %}
+
+{% block extra-js %}
+<script src="/list/"></script>
+<script>
+function initLists(data) {
+  riot.mount('lists', { items: data })
+}
+function initTasks(data) {
+  riot.mount('tasks', { items: data })
+}
+function ifPressEnter(e,callback) {
+  if (event.which == 13) {
+    e.target.blur();
+    window.getSelection().removeAllRanges();
+    callback(e);
+    return false;
+  }
+  return true;
+}
+function saveList(e,that) {
+  var text = $(e.target).text();
+  $.post(
+    "/list/"+e.item.id+"/",
+    {"name": text},
+    function(data){
+      for (var i=0;i<that.items.length;i++) {
+        if (that.items[i].id == e.item.id) { that.items[i] = data; }
+        that.update();
+      }
+    },
+    "json"
+  )
+}
+function destroyItem(e,that,slug) {
+  $.post(
+    "/"+slug+"/delete/"+e.item.id+"/",
+    function(data) {
+      for (var i=0;i<that.items.length;i++) {
+        if (that.items[i].id == e.item.id) { that.items.splice(i,1); }
+        that.update();
+      }
+    }
+  )
+}
+$.get(
+  "/list/",
+  initLists,
+  "json"
+)
+</script>
+{% endblock %}
